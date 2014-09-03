@@ -1,6 +1,6 @@
 {
   "name": "hubot-ifttt",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Hubot with IFTTT",
   "main": "./src/index.coffee",
   "scripts": {
