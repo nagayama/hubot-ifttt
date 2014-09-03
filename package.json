@@ -1,0 +1,27 @@
+{
+  "name": "hubot-ifttt",
+  "version": "0.0.1",
+  "description": "Hubot with IFTTT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nagayama/hubot-ifttt.git"
+  },
+  "keywords": [
+    "hubot",
+    "ifttt"
+  ],
+  "author": "Takeshi Nagayama",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "gitHead": "2c65d306736773ed45b17a6caf3ec783739d81aa",
+  "bugs": {
+    "url": "https://github.com/nagayama/hubot-ifttt/issues"
+  },
+  "dependencies": {
+    "xml2js": "~0.4.4"
+  }
+}
