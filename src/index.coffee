@@ -34,7 +34,7 @@ module.exports = (robot) ->
               searchParams o, ret
           else
             ret.push obj
-            return ret
+          return ret
 
         params = searchParams result, []
         methodName = params[0]
