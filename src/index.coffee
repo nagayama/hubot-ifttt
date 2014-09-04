@@ -49,9 +49,10 @@ module.exports = (robot) ->
               for key, val of param
                 k = val.shift() if key == "name"
                 v = val.shift().string.shift() if key == "value"
-                room    = v if k == "title"
+                rooms   = v if k == "title"
                 message = v if k == "description"
-            robot.messageRoom room, message
+            for room in rooms.split(/,/)
+                robot.messageRoom room.trim(), message
             value = array: data: {}
           else
             res.writeHead 401, 'Content-Type': 'text/xml; charset=utf-8'
