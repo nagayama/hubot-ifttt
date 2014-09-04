@@ -25,43 +25,38 @@ module.exports = (robot) ->
 
     req.on 'end', () ->
       Xml2js.parseString rawBody, (err, result) ->
-        methodName = result.methodCall.methodName.shift()
-        params     = result.methodCall.params.shift().param
-        methodCallArgs = []
+        searchParams = (obj, ret) ->
+          if typeof obj == "object"
+            for k,v of obj
+              searchParams v, ret
+          else if typeof obj == "array"
+            for o in obj
+              searchParams o, ret
+          else
+            ret.push obj
+          return ret
 
-        for param in params
-          for obj in param.value
-            for key, val of obj
-              methodCallArgs.push val.shift()
-
-        value = ""
+        params = searchParams result, []
+        methodName = params[0]
+        rooms      = params[5]
+        body       = params[7]
+        resValue   = ""
 
         switch methodName
           when "mt.supportedMethods"
-            value = 'metaWeblog.getRecentPosts'
+            resValue = 'metaWeblog.getRecentPosts'
           when "metaWeblog.getRecentPosts"
-            value = array: data: {}
+            resValue = array: data: {}
           when "metaWeblog.newPost"
-            params = methodCallArgs[3].member
-            room    = ""
-            message = ""
-            for param in params
-              for key, val of param
-                k = val.shift() if key == "name"
-                v = val.shift().string.shift() if key == "value"
-                rooms   = v if k == "title"
-                message = v if k == "description"
             for room in rooms.split(/,/)
-                robot.messageRoom room.trim(), message
-            value = array: data: {}
+              robot.messageRoom room.trim(), body
+            resValue = array: data: {}
           else
             res.writeHead 401, 'Content-Type': 'text/xml; charset=utf-8'
             res.end()
             return
 
-        res.writeHead 200, 'Content-Type': 'text/xml; charset=utf-8'
         xmlBuilder = new Xml2js.Builder()
-        res_str = xmlBuilder.buildObject(
-          methodResponse: params: param: value: value
-        )
-        res.end(res_str)
+        resBody = xmlBuilder.buildObject( methodResponse: params: param: value: resValue )
+        res.writeHead 200, 'Content-Type': 'text/xml; charset=utf-8', 'Content-Length': resBody.length
+        res.end(resBody)
